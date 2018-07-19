@@ -22,7 +22,7 @@ class FileCreator {
 
     /**
      * Get the location of the config file to use as an example (template)
-     * @param Composer\Installer\PackageEvent $event
+     * @param Composer\Script\Event $event
      * @return string
      */
 	protected static function getSourceFile(\Composer\Script\Event $event) {
@@ -32,7 +32,7 @@ class FileCreator {
 
     /**
      * Get the location of the config file to use as an example (template)
-     * @param Composer\Installer\PackageEvent $event
+     * @param Composer\Script\Event $event
      * @return string
      */
     protected static function getDestinationFile(\Composer\Script\Event $event) {
