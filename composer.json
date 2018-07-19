@@ -10,7 +10,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Dcg\\Config\\": "src/"
+      "Dcg\\": "src/"
     }
   },
   "autoload-dev": {

@@ -1,6 +1,6 @@
 <?php
 
-use \Dcg\Config\Config;
+use \Dcg\Config;
 use PHPUnit\Framework\TestCase;
 
 

@@ -1,20 +1,20 @@
 <?php
 
-namespace Dcg\Config;
+namespace Dcg;
 use Dcg\Config\Exception\ConfigFileNotFoundException;
 use Dcg\Config\Exception\ConfigValueNotFoundException;
 
-class Config {
+final class Config {
 
 	/**
 	 * @var array
 	 */
 	protected static $configValues = [];
 
-	/**
-	 * @var self
-	 */
-	protected static $instance = null;
+	private function __construct()
+    {
+        // cannot instantiate
+    }
 
     /**
      * singleton: return self
@@ -23,35 +23,15 @@ class Config {
      * @return self
      * @throws ConfigFileNotFoundException
      */
-	public static function getInstance($configFile = null) {
+	public static function getInstance($configFile) {
 
-		$configFile = $configFile ?: (self::getRootDir() ? self::getRootDir().'/config/membership-number-client.php' : __DIR__.'/../../../config.php');
+        static $instance = null;
 
-		if (is_null(self::$instance)) {
-			self::setInstance();
+		if (null === $instance) {
+            $instance = new static();
 		}
-		self::init($configFile);
-
-		return self::$instance;
-	}
-
-	/**
-	 *  Set singleton instance
-	 */
-	private static function setInstance ()
-	{
-		self::$instance = new self();
-	}
-
-    /**
-     *  Get values from config file
-     *
-     * @param string $configFile
-     * @throws ConfigFileNotFoundException
-     */
-	private static function init ($configFile)
-	{
-		self::configFileToArray($configFile);
+        self::configFileToArray($configFile);
+		return $instance;
 	}
 
 	/**
@@ -67,15 +47,6 @@ class Config {
 		} else {
 			throw new ConfigFileNotFoundException("Config file could not be found at: ".$configFile);
 		}
-	}
-
-	/**
-	 *  Gets the values that were in the config
-	 * @return array
-	 */
-	public static function getConfigValues ()
-	{
-		return self::$configValues;
 	}
 
 	/**
