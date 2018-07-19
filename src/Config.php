@@ -4,7 +4,7 @@ namespace Dcg;
 use Dcg\Config\Exception\ConfigFileNotFoundException;
 use Dcg\Config\Exception\ConfigValueNotFoundException;
 
-final class Config {
+class Config {
 
 	/**
 	 * @var array
