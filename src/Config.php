@@ -6,12 +6,14 @@ use Dcg\Config\Exception\ConfigValueNotFoundException;
 
 class Config {
 
-	/**
-	 * @var array
-	 */
-	protected static $configValues = [];
+    /**
+     * @var array
+     */
+    protected static $configValues = [];
 
-	private function __construct()
+    protected static $instance = null;
+
+    private function __construct()
     {
         // cannot instantiate
     }
@@ -19,44 +21,57 @@ class Config {
     /**
      * singleton: return self
      *
+     * First call should specify a config file
+     *
      * @param string $configFile (Optional) The absolute filename of the config file
      * @return self
      * @throws ConfigFileNotFoundException
      */
-	public static function getInstance($configFile) {
+    public static function getInstance($configFile = null) {
 
-        static $instance = null;
+        if (null === self::$instance) {
+            if (!$configFile) {
+                $configFile = self::getDefaultConfigFile();
+            }
+            self::$instance = new static();
+        }
+        if ($configFile) {
+            self::configFileToArray($configFile);
+        }
+        return self::$instance;
+    }
 
-		if (null === $instance) {
-            $instance = new static();
-		}
-        self::configFileToArray($configFile);
-		return $instance;
-	}
+    /**
+     * Get the default config file to use
+     * @return string
+     */
+    protected static function getDefaultConfigFile() {
+        return self::getRootDir().'/config.php';
+    }
 
-	/**
-	 * Get values from config file
-	 *
-	 * @param string $configFile The config filename
-	 * @throws ConfigFileNotFoundException
-	 */
-	private static function configFileToArray($configFile) {
+    /**
+     * Get values from config file
+     *
+     * @param string $configFile The config filename
+     * @throws ConfigFileNotFoundException
+     */
+    protected static function configFileToArray($configFile) {
 
-		if (file_exists($configFile)) {
-			self::$configValues = require $configFile;
-		} else {
-			throw new ConfigFileNotFoundException("Config file could not be found at: ".$configFile);
-		}
-	}
+        if (file_exists($configFile)) {
+            self::$configValues = require $configFile;
+        } else {
+            throw new ConfigFileNotFoundException("Config file could not be found at: ".$configFile);
+        }
+    }
 
-	/**
-	 * Gets specific key fom config
-	 *
-	 * @param string $key	The config value identifier
-	 * @param string $default (Optional) The default value if the config value is not set
-	 * @throws ConfigValueNotFoundException
-	 * @return string
-	 */
+    /**
+     * Gets specific key fom config
+     *
+     * @param string $key	The config value identifier
+     * @param string $default (Optional) The default value if the config value is not set
+     * @throws ConfigValueNotFoundException
+     * @return string
+     */
     public function get($key = null, $default = null)
     {
         if (null === $key) {
@@ -70,15 +85,15 @@ class Config {
         }
     }
 
-	/**
-	 * Gets the root dir, assumed to be once level above vendor
-	 * @return bool|string
-	 */
-	protected static function getRootDir() {
-		$dir = dirname(__FILE__);
-		if (false !== ($position = strpos($dir, DIRECTORY_SEPARATOR . 'vendor'))) {
-			return substr($dir, 0, $position);
-		}
-		return false;
-	}
+    /**
+     * Gets the root dir, assumed to be once level above vendor
+     * @return bool|string
+     */
+    protected static function getRootDir() {
+        $dir = dirname(__FILE__);
+        if (false !== ($position = strpos($dir, DIRECTORY_SEPARATOR . 'vendor'))) {
+            return substr($dir, 0, $position);
+        }
+        return false;
+    }
 }
