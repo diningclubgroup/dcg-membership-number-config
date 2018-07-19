@@ -7,7 +7,7 @@ class FileCreator {
 	/**
 	 *  Copy package's config file to project
 	 */
-	public static function createConfigFile (Composer\Installer\PackageEvent $event, $sourceFile = null, $destinationFile = null)
+	public static function createConfigFile (\Composer\Installer\PackageEvent $event)
 	{
         $sourceFile = self::getSourceDir($event);
         $destinationFile = self::getSourceDir($event);
@@ -25,7 +25,7 @@ class FileCreator {
      * @param Composer\Installer\PackageEvent $event
      * @return string
      */
-	protected static function getSourceFile(Composer\Installer\PackageEvent $event) {
+	protected static function getSourceFile(\Composer\Installer\PackageEvent $event) {
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
         return $vendorDir . DIRECTORY_SEPARATOR . 'dcg' . DIRECTORY_SEPARATOR . 'dcg-lib-config' . DIRECTORY_SEPARATOR . 'config.php';
     }
@@ -35,7 +35,7 @@ class FileCreator {
      * @param Composer\Installer\PackageEvent $event
      * @return string
      */
-    protected static function getDestinationFile(Composer\Installer\PackageEvent $event) {
+    protected static function getDestinationFile(\Composer\Installer\PackageEvent $event) {
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
         $configDir = dirname($vendorDir) . DIRECTORY_SEPARATOR . 'config';
         return $configDir . DIRECTORY_SEPARATOR . 'config.php';
