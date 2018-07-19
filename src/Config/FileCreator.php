@@ -12,7 +12,7 @@ class FileCreator {
         $sourceFile = static::getSourceFile($event);
         $destinationFile = static::getDestinationFile($event);
 
-        if (!file_exists($destinationFile)) {
+        if (!file_exists(dirname($destinationFile))) {
             mkdir(dirname($destinationFile), 0777, true);
         }
         if (!file_exists($destinationFile)) {
