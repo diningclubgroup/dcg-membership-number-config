@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcg\Client\MembershipNumber\Config;
+namespace Dcg\Config;
 
 class FileCreator {
 
