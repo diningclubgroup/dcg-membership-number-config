@@ -74,7 +74,7 @@ class Config {
 	 * Gets the root dir, assumed to be once level above vendor
 	 * @return bool|string
 	 */
-	private static function getRootDir() {
+	protected static function getRootDir() {
 		$dir = dirname(__FILE__);
 		if (false !== ($position = strpos($dir, DIRECTORY_SEPARATOR . 'vendor'))) {
 			return substr($dir, 0, $position);
