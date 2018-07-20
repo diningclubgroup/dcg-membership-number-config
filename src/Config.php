@@ -31,7 +31,7 @@ class Config {
 
         if (null === self::$instance) {
             if (!$configFile) {
-                $configFile = self::getDefaultConfigFile();
+                $configFile = static::getDefaultConfigFile();
             }
             self::$instance = new static();
         }
