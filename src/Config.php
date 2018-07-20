@@ -29,16 +29,14 @@ class Config {
      */
     public static function getInstance($configFile = null) {
 
-        if (null === self::$instance) {
-            if (!$configFile) {
-                $configFile = static::getDefaultConfigFile();
-            }
-            self::$instance = new static();
+        if (!$configFile) {
+            $configFile = static::getDefaultConfigFile();
         }
-        if ($configFile) {
+        if (null === self::$instance[$configFile]) {
+            self::$instance[$configFile] = new static();
             self::configFileToArray($configFile);
         }
-        return self::$instance;
+        return self::$instance[$configFile];
     }
 
     /**
