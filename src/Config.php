@@ -9,7 +9,7 @@ class Config {
     /**
      * @var array
      */
-    protected static $configValues = [];
+    protected $configValues = [];
 
     protected static $instance = null;
 
@@ -34,7 +34,7 @@ class Config {
         }
         if (null === self::$instance[$configFile]) {
             self::$instance[$configFile] = new static();
-            self::configFileToArray($configFile);
+            self::$instance[$configFile]->configFileToArray($configFile);
         }
         return self::$instance[$configFile];
     }
@@ -53,10 +53,10 @@ class Config {
      * @param string $configFile The config filename
      * @throws ConfigFileNotFoundException
      */
-    protected static function configFileToArray($configFile) {
+    protected function configFileToArray($configFile) {
 
         if (file_exists($configFile)) {
-            self::$configValues = require $configFile;
+            $this->configValues = require $configFile;
         } else {
             throw new ConfigFileNotFoundException("Config file could not be found at: ".$configFile);
         }
@@ -73,9 +73,9 @@ class Config {
     public function get($key = null, $default = null)
     {
         if (null === $key) {
-            return self::$configValues;
-        } else if (isset(self::$configValues[$key])) {
-            return self::$configValues[$key];
+            return $this->configValues;
+        } else if (isset($this->configValues[$key])) {
+            return $this->configValues[$key];
         } elseif ($default !== null) {
             return $default;
         } else {
