@@ -11,7 +11,7 @@ class Config {
      */
     protected $configValues = [];
 
-    protected static $instance = null;
+    protected static $instance = [];
 
     private function __construct()
     {
@@ -32,7 +32,7 @@ class Config {
         if (!$configFile) {
             $configFile = static::getDefaultConfigFile();
         }
-        if (null === self::$instance[$configFile]) {
+        if (!isset(self::$instance[$configFile])) {
             self::$instance[$configFile] = new static();
             self::$instance[$configFile]->configFileToArray($configFile);
         }
