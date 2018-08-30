@@ -1,7 +1,15 @@
 <?php
 /**
- * Add config as key value pais of config parameter name and value
+ * Add config as key value pairs of config parameter name and value.
+ *
+ * Keyed by the env. All config should sit under prod or test.
+ *
  */
 return [
-    'live' => false // dummmy value
+    'prod' => [
+        'live' => true
+    ],
+    'test' => [
+        'live' => false
+    ]
 ];
