@@ -6,16 +6,24 @@ use Dcg\Config\Exception\ConfigValueNotFoundException;
 
 class Config {
 
+    const ENV_PROD = 'prod';
+    const ENV_TEST = 'test';
+
     /**
      * @var array
      */
     protected $configValues = [];
 
     protected static $instance = [];
+    private $env;
 
-    private function __construct()
+    /**
+     * Config constructor.
+     * @param string $env The enviroment to read config values for. prod or test
+     */
+    private function __construct($env = self::ENV_PROD)
     {
-        // cannot instantiate
+        $this->env = $env;
     }
 
     /**
@@ -24,19 +32,19 @@ class Config {
      * First call should specify a config file
      *
      * @param string $configFile (Optional) The absolute filename of the config file
+     * @param string $env The enviroment to read config values for. prod or test
      * @return self
-     * @throws ConfigFileNotFoundException
      */
-    public static function getInstance($configFile = null) {
+    public static function getInstance($configFile = null, $env = self::ENV_PROD) {
 
         if (!$configFile) {
             $configFile = static::getDefaultConfigFile();
         }
-        if (!isset(self::$instance[$configFile])) {
-            self::$instance[$configFile] = new static();
-            self::$instance[$configFile]->configFileToArray($configFile);
+        if (!isset(self::$instance[$configFile][$env])) {
+            self::$instance[$configFile][$env] = new static($env);
+            self::$instance[$configFile][$env]->configFileToArray($configFile);
         }
-        return self::$instance[$configFile];
+        return self::$instance[$configFile][$env];
     }
 
     /**
@@ -73,9 +81,9 @@ class Config {
     public function get($key = null, $default = null)
     {
         if (null === $key) {
-            return $this->configValues;
-        } else if (isset($this->configValues[$key])) {
-            return $this->configValues[$key];
+            return $this->configValues[$this->env];
+        } else if (isset($this->configValues[$this->env][$key])) {
+            return $this->configValues[$this->env][$key];
         } elseif ($default !== null) {
             return $default;
         } else {
@@ -84,7 +92,7 @@ class Config {
     }
 
     /**
-     * Gets the root dir, assumed to be once level above vendor
+     * Gets the root dir, assumed to be one level above vendor
      * @return bool|string
      */
     protected static function getRootDir() {
