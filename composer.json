@@ -1,8 +1,9 @@
 {
-  "name": "dcg/dcg-lib-config",
+  "name": "dcg/dcg-membership-number-config",
   "description": "A package to add config to a project",
   "type": "library",
   "require": {
+    "php": ">=5.4"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.0",
